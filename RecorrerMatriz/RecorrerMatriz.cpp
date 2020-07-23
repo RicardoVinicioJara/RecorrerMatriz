@@ -175,7 +175,7 @@ void imprimirMatriz(int** matriz, int filas, int columnas) {
 
 int main(void)
 {   
-    cout << " Bienvenido____ \n" << endl;
+    cout << " Bienvenido_____ \n" << endl;
     //Creamos variables que reciben datos por consola
     int filas = 0; //Numero de filas
     int columnas = 0;  //Numero de columnas
