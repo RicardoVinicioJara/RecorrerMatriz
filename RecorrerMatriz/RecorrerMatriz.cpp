@@ -1,207 +1,196 @@
-
 #include <iostream>
-#include <stdio.h>
+#include <cstdio>
+
 using namespace std;
-//Metodo que valida que todo numero ingresado sea mayor a cero 
-//No saldra del bucle while hasta que sea mayor a ceroa
-int mayorACero(int num) {
-    if (num <= 0) {
+
+//Metodo para validar ingreso de un numero
+//Resibe como parametro un numero
+//Valida que sea mayor a cero y menor o igual a 10
+//Queda en buque infinito hasta que el numero este en el rango de 1 - 100
+int validar_numero(int num) {
+    if (num <= 0 or num > 100) {
         do {
-            cout << "El numero ingresado debe ser mayor a cero: ";
+            if (num <= 0) {
+                cout << "El numero ingresado debe ser mayor a cero: ";
+            } else {
+                cout << "El numero ingresado debe ser menor a 101: ";
+            }
             cin >> num;
-        } while (num <= 0);
+        } while (num <= 0 or num > 100);
     }
     return num;
 }
 
-//Llena la matriz inicial con el numero de pasos 
-//Si el numero de pasos es menor a filas * columas > llena con valor 0
-int** llemarMatriz(int filas, int colu, int pasos)
-{
-    int cont = 1;
-    int** array2D = 0;
-    array2D = new int* [colu];
-    //Corre la matriz
-    for (int h = 0; h < filas; h++){
-        array2D[h] = new int[colu];
-        for (int w = 0; w < colu; w++){   
-            //varifica que el numero de pasos no sea mayor al ingresado
-            if (cont <= pasos) {
-            array2D[h][w] = cont;
-                        cont = cont + 1;
-            }
-            //Si ya es mayor lo rellena con 0 hasta salir del for
-            else {
-                array2D[h][w] = 0;
-            }
-            
-        }
-    }
-    //Retorna la matriz
-    return array2D;
-}
-
-//Crea una matriz ingresando datos desde la posicion de pasos
-int** llemarMatrizAdelante(int filas, int colu, int pasos, int recorrer)
-{
-    int cont = 0;
-    int cont2 = 1;
-    int cont3 = 0;
-    int** array2D = 0;
-    array2D = new int* [colu];
-    //Corre la matriz
-    for (int h = 0; h < filas; h++) {
-        array2D[h] = new int[colu];
-        for (int w = 0; w < colu; w++) {
-            //Llena con 0 hasta el dato que cont sea menor que  recorrer
-            if (cont < recorrer) {
-                array2D[h][w] = 0;
-                cont = cont + 1;
-            }
-            else {
-                //Corremos solo el numero de pasos existentes
-                if(cont2 <= pasos){
-                array2D[h][w] = cont2;
-                cont2 = cont2 + 1;
-                }
-                //Se llena con 0 si el numero de pasos no termina con el final de la matriz
-                else {
-                    array2D[h][w] = 0;
-                }
-            }
-
-        }
-    }
-    //If que valida si es necesario escrbir al inicio de la matriz
-    if (cont2 < pasos) {
-        for (int h = 0; h < filas; h++) {
-            for (int w = 0; w < colu; w++) {
-                    if (cont2 <= pasos) {
-                        //Escribe los datos al inicio de la matriz
-                        array2D[h][w] = cont2;
-                        cont2 = cont2 + 1;
-                    }
-                }
-        }
-    }
-    return array2D;
-}
-
-int** llemarMatrizAtras(int filas, int colu, int pasos, int recorrer)
-{
-    int cont = 0;
-    int cont2 = 1;
-    int cont3 = 0;
-    int** array2D = 0;
-    array2D = new int* [colu];
-    //Calculo desde que numero se debe correr 
-    int res = (filas * colu) - recorrer;
-    //Corre la matriz
-    for (int h = 0; h < filas; h++) {
-        array2D[h] = new int[colu];
-        for (int w = 0; w < colu; w++) {
-            //llena con 0 los valores que se debe correr
-            if (cont < res) {
-                array2D[h][w] = 0;
-                cont = cont + 1;
-            }
-            else {
-                //Corremos solo el numero de pasos existentes
-                if (cont2 <= pasos) {
-                    array2D[h][w] = cont2;
-                    cont2 = cont2 + 1;
-                }
-                //Se llena con 0 si el numero de pasos no termina con el final de la matriz
-                else {
-                    array2D[h][w] = 0;
-                }
-            }
-
-        }
-    }
-    //If que valida si es necesario escrbir al inicio de la matriz
-    if (cont2 < pasos) {
-        for (int h = 0; h < filas; h++) {
-            for (int w = 0; w < colu; w++) {
-                if (cont2 <= pasos) {
-                    //Escribe los datos al inicio de la matriz
-                    array2D[h][w] = cont2;
-                    cont2 = cont2 + 1;
-                }
-            }
-        }
-    }
-    
-    return array2D;
-}
-
-
-//Valida que el numero de pasos sea menor al numero de filas * columnas
-int validarPasos(int fil, int col) {
+//Metodo para validad que el numero de pasos no sea mayor columnas*filas
+//Pidel el ingreso de un numero
+//Resibe como parametro numero de filas, columnas
+//Valida que sea mayor a cero y menor a filas*columnas
+//Queda en buque infinito hasta que el numero este en el rango de 0 - filas*columnas
+int validar_pasos(int fil, int col) {
     int pasos = 0;
     cout << " Ingrese numero de pasos: ";
     cin >> pasos;
-    pasos = mayorACero(pasos);
-    bool validacion = false;
-    do {
-        //bucle while hasta que numero ingresdo sea menor a filas * columnas
-        int res = fil * col;
-        if (res >= pasos) {
-            validacion = true;
-        }else {
-            cout << "Numero de pasos icorrectos, Ingrese un numero mayor a cero y menor a: " << res << " ";
-            cin >> pasos;
-            pasos = mayorACero(pasos);
-            validacion = false;
-        }
-    } while (validacion != true);
+    if (pasos <= 0 or pasos > fil * col) {
+        do {
+            if (pasos <= 0) {
+                cout << "El numero de pasos debe ser mayor a cero: ";
+            } else {
+                cout << "El numero de pasos debe ser menor a: " << fil * col << " ";
+            }
 
+            cin >> pasos;
+        } while (pasos <= 0 or pasos > fil * col);
+    }
     return pasos;
 }
 
-//Imprimer la matriz
-void imprimirMatriz(int** matriz, int filas, int columnas) {
-    //Rrecorre la matriz
+//Rrecorre la matriz
+//Para recorrer se necesita saber el numero de filas y columnas
+//Escibre en pantalla la matriz
+//Con %i el salto de linea > hasta que pase a la siquiete fila
+void imprimir_matriz(int **matriz, int filas, int columnas) {
+    printf("\n \n");
     for (int h = 0; h < filas; h++) {
         for (int w = 0; w < columnas; w++) {
-            //Evita el salto de linea > hasta que pase a la siquiete fila
             printf("%i,", matriz[h][w]);
         }
-        //Salto de linea
         printf("\n");
     }
+    printf("\n");
+}
+
+//Llena la matriz inicial con el numero de pasos en tamaño a filas y columnas
+//Si el numero de pasos es menor a filas * columas
+// Si la matriz tiene menos pasos que filas * columnas se llena con 0
+//Imprime la matriz
+void matriz_inicial(int filas, int colu, int pasos) {
+    int cont = 1;
+    int **matriz = new int *[colu];
+    for (int h = 0; h < filas; h++) {
+        matriz[h] = new int[colu];
+        for (int w = 0; w < colu; w++) {
+            //varifica que el numero de pasos no sea mayor al ingresado
+            // Si ya es mayor lo rellena con 0 hasta salir del for
+            if (cont <= pasos) {
+                matriz[h][w] = cont;
+                cont = cont + 1;
+            } else {
+                matriz[h][w] = 0;
+            }
+        }
+    }
+    imprimir_matriz(matriz, filas, colu);
+}
+
+//Se crea una nueva matriz inicial con el numero de pasos en tamaño a filas y columnas
+//Se llena con 0 hasta el dato que cont sea menor que  recorrer
+//Se llena los numeros de pasos hasta que sea el numero a recorrer
+//Si cont2 pasa el numero de pasos se llena con ceros
+void matriz_adelante(int filas, int colu, int pasos, int recorrer) {
+    int cont = 0;
+    int cont2 = 1;
+    int **matriz = new int *[colu];
+    for (int h = 0; h < filas; h++) {
+        matriz[h] = new int[colu];
+        for (int w = 0; w < colu; w++) {
+            //Vereficamos hasta que datos debemos iniciar con cero
+            if (cont < recorrer) {
+                matriz[h][w] = 0;
+                cont = cont + 1;
+            } else {
+                //Ingresmos los numeros de pasos
+                if (cont2 <= pasos) {
+                    matriz[h][w] = cont2;
+                    cont2 = cont2 + 1;
+                } else {//si se pasa cont2 del numero de pasos se llena con cero
+                    matriz[h][w] = 0;
+                }
+            }
+
+        }
+    }//En caso de que cont2 sea siendo menor que numero de pasos,
+    // quiere decir que es necesario escribir al inicio los numeos
+    if (cont2 < pasos) {
+        for (int h = 0; h < filas; h++) {
+            for (int w = 0; w < colu; w++) {
+                if (cont2 <= pasos) {
+                    matriz[h][w] = cont2;
+                    cont2 = cont2 + 1;
+                }
+            }
+        }
+    }
+    imprimir_matriz(matriz, filas, colu);
+}
+
+//Se crea una nueva matriz inicial con el numero de pasos en tamaño a filas y columnas
+//Calculo desde que numero se debe correr **
+//Se llena con 0 hasta cont sea menor a res
+//Se llena los numeros de pasos hasta que sea el numero a recorrer
+//Si cont2 pasa el numero de pasos se llena con ceros
+void matriz_atras(int filas, int colu, int pasos, int recorrer) {
+    int cont = 0;
+    int cont2 = 1;
+    int **matriz = new int *[colu];
+    int res = (filas * colu) - recorrer; //**
+    for (int h = 0; h < filas; h++) {
+        matriz[h] = new int[colu];
+        for (int w = 0; w < colu; w++) {
+            //llenamos con cero hasta  ** sea menor
+            if (cont < res) {
+                matriz[h][w] = 0;
+                cont = cont + 1;
+            } else {//llenamos con el numero de pasos
+                if (cont2 <= pasos) {
+                    matriz[h][w] = cont2;
+                    cont2 = cont2 + 1;
+                } else {//Si se termina los pasos antes de acabar de recorrer la matriz se llena con cero
+                    matriz[h][w] = 0;
+                }
+            }
+        }
+    }
+    //En caso de que cont2 sea siendo menor que numero de pasos,
+    // quiere decir que es necesario escribir al inicio los numeo
+    if (cont2 < pasos) {
+        for (int h = 0; h < filas; h++) {
+            for (int w = 0; w < colu; w++) {
+                if (cont2 <= pasos) {
+                    matriz[h][w] = cont2;
+                    cont2 = cont2 + 1;
+                }
+            }
+        }
+    }
+    imprimir_matriz(matriz, filas, colu);
 }
 
 
-int main(void)
-{   
+int main(void) {
+    //Variables Iniciales
+    int filas = 0;
+    int columnas = 0;
+    int pasos = 0;
+    int recorrer_adelante = 0; //Variable que incrementa segun recorre la matriz
+    int recorrer_atras = 0;
+
     cout << " Bienvenido_____ \n" << endl;
-    //Creamos variables que reciben datos por consola
-    int filas = 0; //Numero de filas
-    int columnas = 0;  //Numero de columnas
-    //Creamos una matriz con 
-    int pasos = 0; //Numero de pasos | para recorrer
-    int recorrer1 = 0;
-    int recorrer2 = 0;
-    //Pedimos ingreso de datos
+    cout << " IVAN ARIEL BACULIMA MONTESDEOCA \n" << endl;
+
+    //Pedimo Ingreso de datos
     cout << " Ingrese numero de filas: ";
     cin >> filas;
-
-    filas = mayorACero(filas);
+    filas = validar_numero(filas);
 
     cout << " Ingrese numero de columnas: ";
     cin >> columnas;
-    columnas = mayorACero(columnas);
-    pasos = validarPasos(filas, columnas);
-    
-    //Creamos la matriz inicial
-    int** matriz = 0;
-    //Creamos una matriz ingresando el numero de columnas 
-    matriz = new int* [columnas];
-    //llamamos al metodo que llena la matriz con datos iniciales
-    matriz = llemarMatriz(filas, columnas, pasos);
-    //Imprimimos la matriz inicial
-    imprimirMatriz(matriz, filas, columnas);
+    columnas = validar_numero(columnas);
+
+    pasos = validar_pasos(filas, columnas);
+
+
+    //Llenamos la matriz inicial
+    matriz_inicial(filas, columnas, pasos);
 
     //variable para selecion de opcion
     char selection;
@@ -218,45 +207,39 @@ int main(void)
         cin >> selection;
 
         switch (selection) {
-        case '1': 
-            //Penticion nueva de datos
-            cout << " Ingrese numero de filas: ";
-            cin >> filas;
-            filas = mayorACero(filas);
-            cout << " Ingrese numero de columnas: ";
-            cin >> columnas;
-            columnas = mayorACero(columnas);
-            pasos = validarPasos(filas, columnas);
-            matriz = llemarMatriz(filas, columnas, pasos);
-            imprimirMatriz(matriz, filas, columnas);
-            //reiniciamos datos
-            recorrer1 = 0;
-            recorrer2 = 0;
-            break;
-        case '2':
-            //Primero pedimos el numero de pasos a recorrer 
-            //sumamos los pasos existentes 
-            recorrer1 = validarPasos(filas, columnas) + recorrer1;
-            //generamos la matriz hacia adelante con el numero de pasos existentes
-            matriz = llemarMatrizAdelante(filas, columnas, pasos, recorrer1);
-            //imprimimos matriz
-            imprimirMatriz(matriz, filas, columnas);
-            break;
-        case '3':
-            //Primero pedimos el numero de pasos a recorrer 
-            //sumamos los pasos existentes 
-            recorrer2 = validarPasos(filas, columnas) + recorrer2;
-            //generamos la matriz hacia atras con el numero de pasos existentes
-            matriz = llemarMatrizAtras(filas, columnas, pasos, recorrer2);
-            //imprimimos matriz
-            imprimirMatriz(matriz, filas, columnas);
-            break;
-      
+            case '1':
+                //Penticion nueva de datos
+                cout << " Ingrese numero de filas: ";
+                cin >> filas;
+                filas = validar_numero(filas);
+                cout << " Ingrese numero de columnas: ";
+                cin >> columnas;
+                columnas = validar_numero(columnas);
+                pasos = validar_pasos(filas, columnas);
+                matriz_inicial(filas, columnas, pasos);
+                //reiniciamos datos
+                recorrer_adelante = 0;
+                recorrer_atras = 0;
+                break;
+            case '2':
+                //Primero pedimos el numero de pasos a recorrer
+                //sumamos los pasos existentes
+                recorrer_adelante = validar_pasos(filas, columnas) + recorrer_adelante;
+                //generamos la matriz hacia adelante con el numero de pasos existentes
+                matriz_adelante(filas, columnas, pasos, recorrer_adelante);
+                break;
+            case '3':
+                //Primero pedimos el numero de pasos a recorrer
+                //sumamos los pasos existentes
+                recorrer_atras = validar_pasos(filas, columnas) + recorrer_atras;
+                //generamos la matriz hacia atras con el numero de pasos existentes
+                matriz_atras(filas, columnas, pasos, recorrer_atras);
+                break;
         }
 
     } while (selection != '4');
     //Salimos en caso de que la opcion sea 4
-    cout << " \n Gracias por usar nuestro sistema  \n Saliendo..... \n \n ";
+    cout << " \n Gracias por usar mi sistema en c++ \n HASTA PRONTO..... \n \n ";
     cin.ignore();
     cin.get();
 
